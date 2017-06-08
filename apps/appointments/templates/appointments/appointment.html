@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Update Appointment</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <div>
+            <a href="{% url 'appointments:home' %}">Dashboard</a>
+            <a href="{% url 'users:logout' %}">Logout</a>
+        </div>
+
+        <form action="{% url 'appointments:edit' appointment_id=appointment.id %}" method="post">
+            {% csrf_token %}
+            Task: <input type="text" name="task" value="{{ appointment.task }}"> 
+            Status: 
+            <select name="status">
+                <option value="Done" {% if appointment.status == "Done" %} selected {% endif %}>Done</option>  
+                <option value="Pending" {% if appointment.status == "Pending" %} selected {% endif %}>Pending</option>  
+                <option value="Missed" {% if appointment.status == "Missed" %} selected {% endif %}>Missed</option>    
+            </select>
+            Date: <input type="date" name="date" value="{{ date }}">
+            Time: <input type="time" name="time" value="{{ time }}">
+            <input type="submit" value="Update">
+        </form>
+    </body>
+</html>

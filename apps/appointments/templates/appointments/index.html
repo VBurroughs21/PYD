@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>What's Up</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+       <div>
+           <h1>Hello {{ user.name }}</h1>
+           <a href="{% url 'users:logout' %}">Logout</a>
+       </div>
+       <h2>{{ today }}</h2>
+       {% if today_appointments %}
+            <p>Here are your appointments for today:</p>
+            <table>
+                <thead>
+                    <th>Task</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </thead>
+                <tbody>
+                    {% for appointment in today_appointments %}
+                        <tr>
+                            <td>{{ appointment.task }}</td>
+                            <td>{{ appointment.appoint_time }}</td>
+                            <td>{{ appointment.status }}</td>
+                            <td>
+                                <a href="{% url 'appointments:read' appointment_id=appointment.id %}">Edit</a> | 
+                                <a href="{% url 'appointments:delete' appointment_id=appointment.id %}">Delete</a> 
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No appointments today.</p>
+        {% endif %}
+
+        {% if other_appointments %}
+            <p>Here are your other appointments:</p>
+            <table>
+                <thead>
+                    <th>Task</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </thead>
+                <tbody>
+                    {% for item in other_appointments %}
+                        <tr>
+                            <td>{{ item.task }}</td>
+                            <td>{{ item.appoint_date }}</td>
+                            <td>{{ item.appoint_time }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        <h3>Add Appointment</h3>
+        <form action="{% url 'appointments:create' %}" method="post">
+            {% csrf_token %}
+            Date: <input type="date" name="appoint_date">
+            Time: <input type="time" name="appoint_time">
+            Task: <input type="text" name="task">
+            <input type="submit" name="" value="Add">
+        </form>
+        {% if messages %}
+            {% for message in messages %}
+                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    </body>
+</html>
